@@ -214,7 +214,7 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
 
         setLoading(true); setResult(null);
         try {
-            const res = await fetch('http://127.0.0.1:8000/generate', {
+            const res = await fetch('https://coldmail-ai-saas.onrender.com/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -248,7 +248,7 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
             formData.append('tone', tone);
             formData.append('include_hiring', String(hiring));
 
-            const res = await fetch('http://127.0.0.1:8000/generate_bulk', { method: 'POST', body: formData });
+            const res = await fetch('https://coldmail-ai-saas.onrender.com/generate_bulk', { method: 'POST', body: formData });
             if (res.ok) {
                 const blob = await res.blob();
                 const url = window.URL.createObjectURL(blob);
