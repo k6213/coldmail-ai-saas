@@ -28,5 +28,6 @@ dist-ssr
 node_modules/
 .vs/
 .env
+.env.local
 dist/
 .DS_Store
