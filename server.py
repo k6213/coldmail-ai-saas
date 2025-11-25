@@ -79,6 +79,8 @@ async def generate_email(request: EmailRequest):
         print(f"❌ Server Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# server.py 수정
+
 @app.post("/generate_bulk")
 async def generate_bulk(
     file: UploadFile = File(...),
@@ -87,10 +89,13 @@ async def generate_bulk(
     service_description: str = Form(...),
     language: str = Form(...),
     tone: str = Form(...),
-    include_hiring: bool = Form(...)
+    # 👇 [수정] bool 대신 str로 받아서 에러 방지
+    include_hiring: str = Form(...) 
 ):
-    # (대량 생성 로직)
     try:
+        # 👇 [추가] 문자열 "true"를 실제 True/False로 변환
+        is_hiring = include_hiring.lower() == 'true'
+
         contents = await file.read()
         if file.filename.endswith('.csv'):
             df = pd.read_csv(io.BytesIO(contents))
@@ -101,10 +106,11 @@ async def generate_bulk(
             df.rename(columns={df.columns[0]: 'Company'}, inplace=True)
 
         results = []
-        target_companies = df['Company'].head(5).tolist() # 데모용 5개 제한
+        target_companies = df['Company'].head(5).tolist()
 
         for company in target_companies:
-            resources = get_company_resources(company, include_hiring)
+            # 👇 변환된 변수(is_hiring) 사용
+            resources = get_company_resources(company, is_hiring)
             email = generate_cold_email(company, resources, my_service, service_description, language, tone)
             results.append({
                 "Company": company,
@@ -120,6 +126,7 @@ async def generate_bulk(
         return response
 
     except Exception as e:
+        print(f"❌ Bulk Error: {e}") # 로그 찍기
         raise HTTPException(status_code=500, detail=str(e))
 
 # --- [NEW] 결제 처리 웹훅 (Webhook) ---

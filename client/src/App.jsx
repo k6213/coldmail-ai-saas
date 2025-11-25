@@ -246,7 +246,7 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
             formData.append('service_description', desc);
             formData.append('language', language);
             formData.append('tone', tone);
-            formData.append('include_hiring', hiring);
+            formData.append('include_hiring', String(hiring));
 
             const res = await fetch('https://coldmail-ai-saas.onrender.com/generate_bulk', { method: 'POST', body: formData });
             if (res.ok) {
