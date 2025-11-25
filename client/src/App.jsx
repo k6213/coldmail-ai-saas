@@ -3,13 +3,16 @@ import { supabase } from './supabaseClient'
 import {
     Mail, LogOut, Zap, Globe, Sparkles, Building2,
     Briefcase, MessageSquare, Upload, FileSpreadsheet, CheckCircle,
-    LayoutTemplate, Send, Loader2, ArrowRight, BarChart3, Users, Globe2
+    LayoutTemplate, Send, Loader2, ArrowRight, BarChart3, Users, Globe2, Lock, UserPlus, LogIn
 } from 'lucide-react'
 
 // 사용자님이 제공해주신 실제 Lemon Squeezy 상품 링크
 const PAYMENT_LINK = "https://zxdcf170.lemonsqueezy.com/buy/531b1cb0-f4ee-41c3-9d23-d92ec81dc923"
 
-// --- [Component 1] Landing Page (English) ---
+// [서버 주소] 배포된 Render 주소
+const API_URL = "https://coldmail-ai-saas.onrender.com";
+
+// --- [Component 1] Landing Page ---
 function LandingPage({ onStart }) {
     return (
         <div className="min-h-screen bg-[#0f172a] text-white selection:bg-blue-500/30 overflow-hidden font-sans">
@@ -20,13 +23,12 @@ function LandingPage({ onStart }) {
                     <span>ColdMail<span className="text-blue-500">.AI</span></span>
                 </div>
                 <button onClick={onStart} className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-full text-sm font-bold transition border border-slate-700">
-                    Sign In
+                    Sign In / Sign Up
                 </button>
             </nav>
 
             {/* Hero Section */}
             <header className="relative max-w-5xl mx-auto px-6 py-20 text-center">
-                {/* Background Blur */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] -z-10"></div>
 
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-bold mb-8 animate-fade-in-up">
@@ -55,7 +57,6 @@ function LandingPage({ onStart }) {
             {/* Features Grid */}
             <section className="max-w-6xl mx-auto px-6 py-20">
                 <div className="grid md:grid-cols-3 gap-8">
-                    {/* Feature 1 */}
                     <div className="bg-slate-900/50 border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800/50 transition">
                         <div className="w-12 h-12 bg-blue-900/50 rounded-2xl flex items-center justify-center mb-6 text-blue-400">
                             <BarChart3 className="w-6 h-6" />
@@ -65,7 +66,6 @@ function LandingPage({ onStart }) {
                             We go beyond basic news. We analyze <b>Growth Signals</b> and <b>Hiring Trends</b> to find the perfect "Why Now" hook.
                         </p>
                     </div>
-                    {/* Feature 2 */}
                     <div className="bg-slate-900/50 border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800/50 transition">
                         <div className="w-12 h-12 bg-purple-900/50 rounded-2xl flex items-center justify-center mb-6 text-purple-400">
                             <FileSpreadsheet className="w-6 h-6" />
@@ -75,7 +75,6 @@ function LandingPage({ onStart }) {
                             Upload your lead list (CSV/Excel). Our AI will research and write personalized emails for <b>100+ leads</b> in minutes.
                         </p>
                     </div>
-                    {/* Feature 3 */}
                     <div className="bg-slate-900/50 border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800/50 transition">
                         <div className="w-12 h-12 bg-green-900/50 rounded-2xl flex items-center justify-center mb-6 text-green-400">
                             <Globe2 className="w-6 h-6" />
@@ -88,14 +87,6 @@ function LandingPage({ onStart }) {
                 </div>
             </section>
 
-            {/* Footer CTA */}
-            <section className="py-20 text-center border-t border-slate-800 bg-slate-900/30">
-                <h2 className="text-3xl font-bold mb-6">Ready to scale your outreach?</h2>
-                <button onClick={onStart} className="px-10 py-4 bg-white text-slate-900 hover:bg-slate-200 rounded-full font-bold text-lg shadow-xl transition transform hover:-translate-y-1">
-                    Start Writing Now
-                </button>
-            </section>
-
             <footer className="py-8 text-center text-slate-600 text-sm">
                 © 2025 ColdMail.AI Inc. All rights reserved.
             </footer>
@@ -103,41 +94,52 @@ function LandingPage({ onStart }) {
     )
 }
 
-// --- [Component 2] App Entry & Login (English) ---
+// --- [Component 2] App Entry (Auth Logic) ---
 function App() {
     const [showLanding, setShowLanding] = useState(true)
     const [session, setSession] = useState(null)
-    const [credits, setCredits] = useState(0)
-    const [emailInput, setEmailInput] = useState('')
-    const [loadingLogin, setLoadingLogin] = useState(false)
+
+    // Auth States
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [isSignUp, setIsSignUp] = useState(false) // true면 회원가입 모드, false면 로그인 모드
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session)
-            if (session) {
-                setShowLanding(false)
-                fetchCredits(session.user.id)
-            }
+            if (session) setShowLanding(false)
         })
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session)
-            if (session) fetchCredits(session.user.id)
         })
         return () => subscription.unsubscribe()
     }, [])
 
-    const fetchCredits = async (userId) => {
-        const { data } = await supabase.from('profiles').select('credits').eq('id', userId).single()
-        if (data) setCredits(data.credits)
-    }
-
-    const handleLogin = async (e) => {
+    // 로그인 및 회원가입 처리 함수
+    const handleAuth = async (e) => {
         e.preventDefault()
-        setLoadingLogin(true)
-        const { error } = await supabase.auth.signInWithOtp({ email: emailInput })
-        if (error) alert(error.message)
-        else alert('Check your inbox! We sent you a magic link. 🚀')
-        setLoadingLogin(false)
+        setLoading(true)
+
+        if (isSignUp) {
+            // 회원가입 로직
+            const { data, error } = await supabase.auth.signUp({ email, password })
+            if (error) {
+                alert("Sign Up Failed: " + error.message)
+            } else {
+                alert("Sign up successful! Please log in.")
+                setIsSignUp(false) // 가입 성공 시 로그인 화면으로 전환
+            }
+        } else {
+            // 로그인 로직
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+            if (error) {
+                alert("Login Failed: " + error.message)
+            } else {
+                // 로그인 성공 시 자동으로 session 상태가 변하며 화면 전환됨
+            }
+        }
+        setLoading(false)
     }
 
     const handleLogout = async () => {
@@ -148,7 +150,7 @@ function App() {
 
     if (showLanding && !session) return <LandingPage onStart={() => setShowLanding(false)} />
 
-    // Login Screen
+    // --- Auth Screen (Login / Sign Up) ---
     if (!session) {
         return (
             <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-4 relative overflow-hidden font-sans">
@@ -161,27 +163,72 @@ function App() {
                     <div className="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/20 mb-6">
                         <Mail className="w-8 h-8 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-                    <p className="text-slate-400 mb-8">Your AI Sales Agent is ready.</p>
-                    <div className="relative mb-6">
-                        <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
-                        <input type="email" placeholder="name@company.com" value={emailInput} onChange={e => setEmailInput(e.target.value)}
-                            className="w-full bg-slate-800 border-slate-600 rounded-xl py-3 pl-12 text-white focus:ring-2 focus:ring-blue-500 outline-none" />
+                    <h2 className="text-3xl font-bold text-white mb-2">
+                        {isSignUp ? 'Create Account' : 'Welcome Back'}
+                    </h2>
+                    <p className="text-slate-400 mb-8">
+                        {isSignUp ? 'Join us to scale your sales outreach.' : 'Your AI Sales Agent is ready.'}
+                    </p>
+
+                    <form onSubmit={handleAuth} className="space-y-4 text-left">
+                        <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Email</label>
+                            <div className="relative">
+                                <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
+                                <input
+                                    type="email"
+                                    required
+                                    placeholder="name@company.com"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    className="w-full bg-slate-800 border-slate-600 rounded-xl py-3 pl-12 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Password</label>
+                            <div className="relative">
+                                <Lock className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
+                                <input
+                                    type="password"
+                                    required
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    className="w-full bg-slate-800 border-slate-600 rounded-xl py-3 pl-12 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
+                            {loading ? <Loader2 className="animate-spin w-5 h-5" /> : (isSignUp ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />)}
+                            {isSignUp ? 'Sign Up' : 'Sign In'}
+                        </button>
+                    </form>
+
+                    <div className="mt-6 pt-6 border-t border-slate-800">
+                        <p className="text-slate-400 text-sm">
+                            {isSignUp ? "Already have an account?" : "Don't have an account?"}
+                            <button
+                                onClick={() => setIsSignUp(!isSignUp)}
+                                className="ml-2 text-blue-400 hover:text-blue-300 font-bold hover:underline"
+                            >
+                                {isSignUp ? "Log In" : "Sign Up"}
+                            </button>
+                        </p>
                     </div>
-                    <button onClick={handleLogin} disabled={loadingLogin} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-500/25">
-                        {loadingLogin ? 'Sending...' : 'Send Magic Link'}
-                    </button>
-                    <p className="mt-4 text-xs text-slate-500">Password-free secure login via Supabase</p>
                 </div>
             </div>
         )
     }
 
-    return <MainApp session={session} credits={credits} refreshCredits={() => fetchCredits(session.user.id)} onLogout={handleLogout} />
+    return <MainApp session={session} onLogout={handleLogout} />
 }
 
-// --- [Component 3] Main Dashboard (English) ---
-function MainApp({ session, credits, refreshCredits, onLogout }) {
+// --- [Component 3] Main Dashboard ---
+function MainApp({ session, onLogout }) {
+    const [credits, setCredits] = useState(0)
     const [mode, setMode] = useState('single')
     const [myService, setMyService] = useState('AI Sales Solution')
     const [desc, setDesc] = useState('An AI tool that automates personalized cold emails by analyzing company news.')
@@ -194,9 +241,19 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
     const [file, setFile] = useState(null)
     const [loading, setLoading] = useState(false)
 
-    // 💰 Payment Logic: Redirect to Lemon Squeezy
+    // 앱 실행 시 크레딧 조회
+    useEffect(() => {
+        if (session?.user?.id) {
+            fetchCredits(session.user.id)
+        }
+    }, [session])
+
+    const fetchCredits = async (userId) => {
+        const { data } = await supabase.from('profiles').select('credits').eq('id', userId).single()
+        if (data) setCredits(data.credits)
+    }
+
     const handlePayment = () => {
-        // Append user_id to verify payment later via Webhook
         const checkoutUrl = `${PAYMENT_LINK}?checkout[custom][user_id]=${session.user.id}`;
         window.location.href = checkoutUrl;
     };
@@ -204,7 +261,6 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
     const handleGenerate = async () => {
         if (!company) return alert("Please enter a company name.");
 
-        // 💳 Credit Check & Trigger Payment
         if (credits <= 0) {
             if (confirm("Insufficient credits! Would you like to recharge 50 credits for $9?")) {
                 handlePayment();
@@ -214,7 +270,7 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
 
         setLoading(true); setResult(null);
         try {
-            const res = await fetch('https://coldmail-ai-saas.onrender.com/generate', {
+            const res = await fetch(`${API_URL}/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -224,14 +280,13 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
                 })
             });
             const data = await res.json();
-            if (res.ok) { setResult(data); refreshCredits(); }
+            if (res.ok) { setResult(data); fetchCredits(session.user.id); }
             else { alert("Failed: " + data.detail); }
-        } catch (e) { alert("Server Error"); } finally { setLoading(false); }
+        } catch (e) { alert("Server Error: " + e); } finally { setLoading(false); }
     };
 
     const handleBulkGenerate = async () => {
         if (!file) return alert("Please upload a file.");
-        // 💳 Credit Check for Bulk? (You might want strict logic here too)
         if (credits <= 0) {
             if (confirm("Insufficient credits! Recharge now?")) handlePayment();
             return;
@@ -248,15 +303,18 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
             formData.append('tone', tone);
             formData.append('include_hiring', String(hiring));
 
-            const res = await fetch('https://coldmail-ai-saas.onrender.com/generate_bulk', { method: 'POST', body: formData });
+            const res = await fetch(`${API_URL}/generate_bulk`, { method: 'POST', body: formData });
             if (res.ok) {
                 const blob = await res.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a'); a.href = url; a.download = "result.csv";
                 document.body.appendChild(a); a.click();
                 alert("Download Complete!");
+            } else {
+                const err = await res.json();
+                alert("Failed: " + err.detail);
             }
-        } catch (e) { alert("Server Error"); } finally { setLoading(false); }
+        } catch (e) { alert("Server Error: " + e); } finally { setLoading(false); }
     };
 
     return (
@@ -268,25 +326,19 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
                         <span className="font-bold text-xl text-white tracking-tight">ColdMail<span className="text-blue-500">.AI</span> Pro</span>
                     </div>
                     <div className="flex gap-4 items-center">
-                        {/* 💰 Recharge Button */}
-                        <button
-                            onClick={handlePayment}
-                            className="px-3 py-1 bg-slate-800 border border-slate-700 hover:border-yellow-500/50 rounded-full text-sm font-bold flex gap-2 items-center text-slate-300 transition group"
-                            title="Click to Recharge"
-                        >
-                            <Zap className={`w-4 h-4 ${credits > 0 ? 'text-yellow-400 fill-yellow-400' : 'text-slate-500'}`} />
-                            {credits} Credits
-                            <span className="bg-yellow-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded ml-1 group-hover:inline-block hidden">
-                                + Add
-                            </span>
+                        <button onClick={handlePayment} className="px-3 py-1 bg-slate-800 border border-slate-700 hover:border-yellow-500/50 rounded-full text-sm font-bold flex gap-2 items-center text-slate-300 transition group">
+                            <Zap className={`w-4 h-4 ${credits > 0 ? 'text-yellow-400 fill-yellow-400' : 'text-slate-500'}`} /> {credits} Credits
+                            <span className="bg-yellow-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded ml-1 group-hover:inline-block hidden">+ Add</span>
                         </button>
-
-                        <button onClick={onLogout} title="Log out" className="text-slate-400 hover:text-white"><LogOut className="w-5 h-5" /></button>
+                        <button onClick={onLogout} className="text-slate-400 hover:text-white flex items-center gap-1 text-sm font-bold">
+                            <LogOut className="w-4 h-4" /> Logout
+                        </button>
                     </div>
                 </div>
             </nav>
 
             <div className="max-w-6xl mx-auto px-4 py-8">
+                {/* Mode Switcher */}
                 <div className="flex justify-center mb-8">
                     <div className="bg-slate-800 p-1 rounded-xl flex gap-1">
                         <button onClick={() => setMode('single')} className={`px-6 py-2 rounded-lg text-sm font-bold transition ${mode === 'single' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>Single Analysis</button>
@@ -295,6 +347,7 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Settings Panel */}
                     <div className="lg:col-span-4 space-y-5">
                         <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-xl">
                             <h3 className="font-bold text-white mb-5 flex gap-2 items-center"><Globe className="w-5 h-5 text-blue-500" /> Campaign Settings</h3>
@@ -309,7 +362,6 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
                                         <option value="Spanish">🇪🇸 Spanish</option>
                                     </select>
                                 </div>
-
                                 <div>
                                     <label className="text-xs text-slate-500 font-bold uppercase mb-1 block">Tone & Manner</label>
                                     <div className="relative">
@@ -321,16 +373,13 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
                                         </select>
                                     </div>
                                 </div>
-
                                 <div className={`flex items-center gap-3 bg-slate-800 p-3 rounded-lg border cursor-pointer transition ${hiring ? 'border-green-500/50 bg-green-900/10' : 'border-slate-700'}`} onClick={() => setHiring(!hiring)}>
                                     <div className={`w-5 h-5 rounded border flex items-center justify-center ${hiring ? 'bg-green-500 border-green-500' : 'border-slate-500'}`}>
                                         {hiring && <CheckCircle className="w-3.5 h-3.5 text-white" />}
                                     </div>
                                     <span className={`text-sm font-medium ${hiring ? 'text-green-400' : 'text-slate-300'}`}>Include Hiring Signals</span>
                                 </div>
-
                                 <hr className="border-slate-800 my-4" />
-
                                 <div>
                                     <label className="text-xs text-slate-500 font-bold uppercase mb-1 block">My Service</label>
                                     <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none" value={myService} onChange={e => setMyService(e.target.value)} />
@@ -343,6 +392,7 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
                         </div>
                     </div>
 
+                    {/* Results Panel */}
                     <div className="lg:col-span-8">
                         {mode === 'single' ? (
                             <div className="h-full flex flex-col gap-6">
@@ -430,7 +480,6 @@ function MainApp({ session, credits, refreshCredits, onLogout }) {
                                 )}
                             </div>
                         ) : (
-                            // Bulk Mode UI (English)
                             <div className="h-full bg-slate-900 border border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-xl">
                                 <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-6">
                                     <FileSpreadsheet className="w-10 h-10 text-purple-400" />
