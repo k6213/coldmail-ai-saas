@@ -3,7 +3,7 @@ import { supabase } from './supabaseClient'
 import { 
   Mail, LogOut, Zap, Globe, Sparkles, Building2, 
   Briefcase, MessageSquare, Upload, FileSpreadsheet, CheckCircle,
-  LayoutTemplate, Send, Loader2, ArrowRight, BarChart3, Users, Globe2, Lock, UserPlus, LogIn
+  LayoutTemplate, Send, Loader2, ArrowRight, BarChart3, Users, Globe2, Lock, UserPlus, LogIn, Star, ChevronRight
 } from 'lucide-react'
 
 // 사용자님이 제공해주신 실제 Lemon Squeezy 상품 링크
@@ -12,94 +12,79 @@ const PAYMENT_LINK = "https://zxdcf170.lemonsqueezy.com/buy/531b1cb0-f4ee-41c3-9
 // [서버 주소] 배포된 Render 주소
 const API_URL = "https://coldmail-ai-saas.onrender.com"; 
 
-// Google Logo SVG Component
-const GoogleIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20">
-    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/>
-    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-  </svg>
-)
-
-// --- [Component 1] Landing Page ---
+// --- [Component 1] Landing Page (Redesigned) ---
 function LandingPage({ onStart }) {
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white selection:bg-blue-500/30 overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-violet-500/30 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] -z-10"></div>
+      
       {/* Navigation */}
-      <nav className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
-          <div className="bg-blue-600 p-1.5 rounded-lg"><Mail className="w-5 h-5 text-white"/></div>
-          <span>ColdMail<span className="text-blue-500">.AI</span></span>
+          <div className="bg-gradient-to-br from-violet-600 to-indigo-600 p-2 rounded-lg shadow-lg shadow-violet-500/20">
+            <Mail className="w-5 h-5 text-white"/>
+          </div>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">ColdMail.AI</span>
         </div>
-        <button onClick={onStart} className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-full text-sm font-bold transition border border-slate-700">
-          Sign In / Sign Up
+        <button onClick={onStart} className="group px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-sm font-medium transition-all flex items-center gap-2 backdrop-blur-sm">
+          Sign In <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform"/>
         </button>
       </nav>
 
       {/* Hero Section */}
-      <header className="relative max-w-5xl mx-auto px-6 py-20 text-center">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] -z-10"></div>
-        
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-bold mb-8 animate-fade-in-up">
-          <Sparkles className="w-4 h-4" /> 
-          <span>v1.0 Now Available Globally</span>
+      <header className="relative max-w-5xl mx-auto px-6 py-24 text-center z-10">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-bold mb-8 animate-fade-in-up hover:bg-violet-500/20 transition cursor-default">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
+          </span>
+          v2.0 Now Available Globally
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight animate-fade-in-up delay-100">
           Turn 3 Hours of Research <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Into Just 3 Seconds.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-indigo-400">Into Just 3 Seconds.</span>
         </h1>
         
-        <p className="text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200">
-          Stop manually googling prospects. <br className="hidden md:block"/>
-          Our AI analyzes <b>News & Hiring Signals</b> to craft hyper-personalized cold emails that actually get replies.
+        <p className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200">
+          Stop manually googling prospects. Our AI analyzes <span className="text-white font-semibold">News & Hiring Signals</span> to craft hyper-personalized cold emails that actually get replies.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-200">
-          <button onClick={onStart} className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold text-lg shadow-lg shadow-blue-500/25 flex items-center gap-2 transition transform hover:-translate-y-1">
-            Get Started for Free <ArrowRight className="w-5 h-5"/>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
+          <button onClick={onStart} className="px-8 py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white rounded-full font-bold text-lg shadow-xl shadow-violet-500/25 flex items-center gap-2 transition-all transform hover:-translate-y-1">
+            Get Started for Free <Sparkles className="w-5 h-5"/>
           </button>
-          <span className="text-slate-500 text-sm font-medium px-4">💳 No credit card required</span>
+          <div className="flex items-center gap-2 text-slate-500 text-sm font-medium px-4">
+            <div className="flex -space-x-2">
+               {[1,2,3].map(i => <div key={i} className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700"></div>)}
+            </div>
+            Used by 1,000+ Sales Pros
+          </div>
         </div>
       </header>
 
       {/* Features Grid */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-slate-900/50 border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800/50 transition">
-            <div className="w-12 h-12 bg-blue-900/50 rounded-2xl flex items-center justify-center mb-6 text-blue-400">
-              <BarChart3 className="w-6 h-6"/>
+      <section className="max-w-6xl mx-auto px-6 pb-32 relative z-10">
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            { icon: BarChart3, color: "text-blue-400", bg: "bg-blue-500/10", title: "Deep Intelligence", desc: "We analyze Growth Signals and Hiring Trends to find the perfect hook." },
+            { icon: FileSpreadsheet, color: "text-fuchsia-400", bg: "bg-fuchsia-500/10", title: "Bulk Automation", desc: "Upload your lead list (CSV). Our AI writes personalized emails for 100+ leads in minutes." },
+            { icon: Globe2, color: "text-emerald-400", bg: "bg-emerald-500/10", title: "Multi-Language", desc: "Generate native-level emails in English, Korean, Japanese, and Spanish instantly." }
+          ].map((feature, idx) => (
+            <div key={idx} className="bg-slate-900/40 backdrop-blur-md border border-white/5 p-8 rounded-3xl hover:border-white/10 hover:bg-white/5 transition duration-300 group">
+              <div className={`w-12 h-12 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
+                <feature.icon className="w-6 h-6"/>
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-slate-100">{feature.title}</h3>
+              <p className="text-slate-400 leading-relaxed text-sm">
+                {feature.desc}
+              </p>
             </div>
-            <h3 className="text-xl font-bold mb-3">Deep Intelligence</h3>
-            <p className="text-slate-400 leading-relaxed">
-              We go beyond basic news. We analyze <b>Growth Signals</b> and <b>Hiring Trends</b> to find the perfect "Why Now" hook.
-            </p>
-          </div>
-          <div className="bg-slate-900/50 border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800/50 transition">
-            <div className="w-12 h-12 bg-purple-900/50 rounded-2xl flex items-center justify-center mb-6 text-purple-400">
-              <FileSpreadsheet className="w-6 h-6"/>
-            </div>
-            <h3 className="text-xl font-bold mb-3">Bulk Automation</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Upload your lead list (CSV/Excel). Our AI will research and write personalized emails for <b>100+ leads</b> in minutes.
-            </p>
-          </div>
-          <div className="bg-slate-900/50 border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800/50 transition">
-            <div className="w-12 h-12 bg-green-900/50 rounded-2xl flex items-center justify-center mb-6 text-green-400">
-              <Globe2 className="w-6 h-6"/>
-            </div>
-            <h3 className="text-xl font-bold mb-3">Multi-Language</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Targeting global markets? Generate native-level emails in <b>English, Korean, Japanese, and Spanish</b> instantly.
-            </p>
-          </div>
+          ))}
         </div>
       </section>
-
-      <footer className="py-8 text-center text-slate-600 text-sm">
-        © 2025 ColdMail.AI Inc. All rights reserved.
-      </footer>
     </div>
   )
 }
@@ -130,9 +115,7 @@ function App() {
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: window.location.origin // 로그인 후 현재 페이지로 돌아옴
-      }
+      options: { redirectTo: window.location.origin }
     })
     if (error) alert("Google Login Failed: " + error.message)
   }
@@ -141,67 +124,57 @@ function App() {
   const handleAuth = async (e) => {
     e.preventDefault()
     setLoading(true)
-    
     if (isSignUp) {
-      // [회원가입] 이메일 인증 메일 발송됨
       const { data, error } = await supabase.auth.signUp({ 
-        email, 
-        password,
-        options: {
-          emailRedirectTo: window.location.origin // 인증 링크 클릭 시 돌아올 주소
-        }
+        email, password, options: { emailRedirectTo: window.location.origin }
       })
-      if (error) {
-        alert("Sign Up Failed: " + error.message)
-      } else {
-        // 중요: Supabase 설정에서 "Confirm Email"이 켜져 있으면 로그인이 바로 안 됨
-        alert("🎉 Verification email sent! Please check your inbox to confirm your account.")
-        setIsSignUp(false) // 로그인 화면으로 전환
+      if (error) alert("Sign Up Failed: " + error.message)
+      else {
+        alert("🎉 Verification email sent! Please check your inbox.")
+        setIsSignUp(false)
       }
     } else {
-      // [로그인]
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) {
-        alert("Login Failed: " + error.message)
-      }
+      if (error) alert("Login Failed: " + error.message)
     }
     setLoading(false)
   }
   
   const handleLogout = async () => { 
-    await supabase.auth.signOut(); 
-    setSession(null); 
-    setShowLanding(true);
+    await supabase.auth.signOut(); setSession(null); setShowLanding(true);
   }
 
   if (showLanding && !session) return <LandingPage onStart={() => setShowLanding(false)} />
 
-  // --- Auth Screen (Login / Sign Up) ---
+  // --- Auth Screen (Redesigned) ---
   if (!session) {
     return (
-        <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-4 relative overflow-hidden font-sans">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-             <button onClick={()=>setShowLanding(true)} className="absolute top-6 left-6 text-slate-400 hover:text-white flex items-center gap-2 font-bold z-20">
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden font-sans">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[120px]"></div>
+            
+             <button onClick={()=>setShowLanding(true)} className="absolute top-8 left-8 text-slate-400 hover:text-white flex items-center gap-2 font-bold z-20 transition">
                 <ArrowRight className="w-4 h-4 rotate-180"/> Back
              </button>
 
-            <div className="max-w-md w-full bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 p-10 rounded-3xl shadow-2xl relative z-10 text-center">
-                <div className="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/20 mb-6">
-                    <Mail className="w-8 h-8 text-white" />
+            <div className="max-w-md w-full bg-slate-900/80 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl relative z-10">
+                <div className="text-center mb-8">
+                    <div className="w-14 h-14 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-violet-500/20 mb-6">
+                        <Mail className="w-7 h-7 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-2">
+                      {isSignUp ? 'Create Account' : 'Welcome Back'}
+                    </h2>
+                    <p className="text-slate-400 text-sm">
+                      {isSignUp ? 'Join us to scale your sales outreach.' : 'Your AI Sales Agent is ready.'}
+                    </p>
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-2">
-                  {isSignUp ? 'Create Account' : 'Welcome Back'}
-                </h2>
-                <p className="text-slate-400 mb-8">
-                  {isSignUp ? 'Join us to scale your sales outreach.' : 'Your AI Sales Agent is ready.'}
-                </p>
                 
-                {/* 구글 로그인 버튼 */}
                 <button 
                   onClick={handleGoogleLogin}
-                  className="w-full bg-white text-slate-900 font-bold py-3 rounded-xl transition hover:bg-slate-100 flex items-center justify-center gap-3 mb-6 border border-slate-200"
+                  className="w-full bg-white text-slate-900 font-bold py-3 rounded-xl transition hover:bg-slate-100 flex items-center justify-center gap-3 mb-6"
                 >
-                  <GoogleIcon />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                   <span>Continue with Google</span>
                 </button>
 
@@ -211,50 +184,28 @@ function App() {
                   <div className="h-px bg-slate-700 flex-1"></div>
                 </div>
 
-                <form onSubmit={handleAuth} className="space-y-4 text-left">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Email</label>
-                    <div className="relative">
-                        <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-500"/>
-                        <input 
-                          type="email" 
-                          required
-                          placeholder="name@company.com" 
-                          value={email} 
-                          onChange={e=>setEmail(e.target.value)} 
-                          className="w-full bg-slate-800 border-slate-600 rounded-xl py-3 pl-12 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                        />
-                    </div>
+                <form onSubmit={handleAuth} className="space-y-4">
+                  <div className="relative group">
+                      <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-500 group-focus-within:text-violet-400 transition"/>
+                      <input type="email" required placeholder="name@company.com" value={email} onChange={e=>setEmail(e.target.value)} 
+                        className="w-full bg-slate-800/50 border border-slate-700 rounded-xl py-3 pl-12 text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition-all"/>
+                  </div>
+                  <div className="relative group">
+                      <Lock className="absolute left-4 top-3.5 w-5 h-5 text-slate-500 group-focus-within:text-violet-400 transition"/>
+                      <input type="password" required placeholder="••••••••" value={password} onChange={e=>setPassword(e.target.value)} 
+                        className="w-full bg-slate-800/50 border border-slate-700 rounded-xl py-3 pl-12 text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition-all"/>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Password</label>
-                    <div className="relative">
-                        <Lock className="absolute left-4 top-3.5 w-5 h-5 text-slate-500"/>
-                        <input 
-                          type="password" 
-                          required
-                          placeholder="••••••••" 
-                          value={password} 
-                          onChange={e=>setPassword(e.target.value)} 
-                          className="w-full bg-slate-800 border-slate-600 rounded-xl py-3 pl-12 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                        />
-                    </div>
-                  </div>
-
-                  <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
+                  <button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-violet-500/25 flex items-center justify-center gap-2 transform active:scale-95">
                       {loading ? <Loader2 className="animate-spin w-5 h-5"/> : (isSignUp ? <UserPlus className="w-5 h-5"/> : <LogIn className="w-5 h-5"/>)}
                       {isSignUp ? 'Sign Up' : 'Sign In'}
                   </button>
                 </form>
 
-                <div className="mt-6 pt-6 border-t border-slate-800">
+                <div className="mt-6 text-center">
                   <p className="text-slate-400 text-sm">
                     {isSignUp ? "Already have an account?" : "Don't have an account?"}
-                    <button 
-                      onClick={() => setIsSignUp(!isSignUp)}
-                      className="ml-2 text-blue-400 hover:text-blue-300 font-bold hover:underline"
-                    >
+                    <button onClick={() => setIsSignUp(!isSignUp)} className="ml-2 text-violet-400 hover:text-violet-300 font-bold hover:underline">
                       {isSignUp ? "Log In" : "Sign Up"}
                     </button>
                   </p>
@@ -267,7 +218,7 @@ function App() {
   return <MainApp session={session} onLogout={handleLogout} />
 }
 
-// --- [Component 3] Main Dashboard ---
+// --- [Component 3] Main Dashboard (Redesigned) ---
 function MainApp({ session, onLogout }) {
   const [credits, setCredits] = useState(0)
   const [mode, setMode] = useState('single') 
@@ -282,11 +233,8 @@ function MainApp({ session, onLogout }) {
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  // 앱 실행 시 크레딧 조회
   useEffect(() => {
-    if (session?.user?.id) {
-      fetchCredits(session.user.id)
-    }
+    if (session?.user?.id) fetchCredits(session.user.id)
   }, [session])
 
   const fetchCredits = async (userId) => {
@@ -295,53 +243,35 @@ function MainApp({ session, onLogout }) {
   }
 
   const handlePayment = () => {
-    const checkoutUrl = `${PAYMENT_LINK}?checkout[custom][user_id]=${session.user.id}`;
-    window.location.href = checkoutUrl;
+    window.location.href = `${PAYMENT_LINK}?checkout[custom][user_id]=${session.user.id}`;
   };
 
   const handleGenerate = async () => {
     if (!company) return alert("Please enter a company name.");
-    
-    if (credits <= 0) {
-       if(confirm("Insufficient credits! Would you like to recharge 50 credits for $9?")) {
-         handlePayment();
-       }
-       return;
-    }
+    if (credits <= 0) { if(confirm("Insufficient credits! Recharge now?")) handlePayment(); return; }
 
     setLoading(true); setResult(null);
     try {
       const res = await fetch(`${API_URL}/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: session.user.id, company_name: company,
-          my_service: myService, service_description: desc,
-          language, tone, include_hiring: hiring
-        })
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: session.user.id, company_name: company, my_service: myService, service_description: desc, language, tone, include_hiring: hiring })
       });
       const data = await res.json();
       if (res.ok) { setResult(data); fetchCredits(session.user.id); }
-      else { alert("Failed: " + data.detail); }
+      else alert("Failed: " + data.detail);
     } catch (e) { alert("Server Error: " + e); } finally { setLoading(false); }
   };
 
   const handleBulkGenerate = async () => {
     if (!file) return alert("Please upload a file.");
-    if (credits <= 0) {
-        if(confirm("Insufficient credits! Recharge now?")) handlePayment();
-        return;
-    }
+    if (credits <= 0) { if(confirm("Insufficient credits! Recharge now?")) handlePayment(); return; }
 
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('user_id', session.user.id);
-      formData.append('my_service', myService);
-      formData.append('service_description', desc);
-      formData.append('language', language);
-      formData.append('tone', tone);
+      formData.append('file', file); formData.append('user_id', session.user.id);
+      formData.append('my_service', myService); formData.append('service_description', desc);
+      formData.append('language', language); formData.append('tone', tone);
       formData.append('include_hiring', String(hiring));
 
       const res = await fetch(`${API_URL}/generate_bulk`, { method: 'POST', body: formData });
@@ -351,141 +281,150 @@ function MainApp({ session, onLogout }) {
         const a = document.createElement('a'); a.href = url; a.download = "result.csv";
         document.body.appendChild(a); a.click();
         alert("Download Complete!");
-      } else {
-        const err = await res.json();
-        alert("Failed: " + err.detail);
-      }
+      } else { const err = await res.json(); alert("Failed: " + err.detail); }
     } catch (e) { alert("Server Error: " + e); } finally { setLoading(false); }
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-200 font-sans selection:bg-blue-500/30">
-      <nav className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-violet-500/30 relative">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+
+      <nav className="border-b border-white/10 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="bg-blue-600 p-1.5 rounded-lg"><Mail className="w-5 h-5 text-white"/></div>
-            <span className="font-bold text-xl text-white tracking-tight">ColdMail<span className="text-blue-500">.AI</span> Pro</span>
+            <div className="bg-gradient-to-br from-violet-600 to-indigo-600 p-1.5 rounded-lg"><Mail className="w-5 h-5 text-white"/></div>
+            <span className="font-bold text-xl text-white tracking-tight">ColdMail<span className="text-violet-500">.AI</span></span>
           </div>
           <div className="flex gap-4 items-center">
-             <button onClick={handlePayment} className="px-3 py-1 bg-slate-800 border border-slate-700 hover:border-yellow-500/50 rounded-full text-sm font-bold flex gap-2 items-center text-slate-300 transition group">
-                <Zap className={`w-4 h-4 ${credits > 0 ? 'text-yellow-400 fill-yellow-400' : 'text-slate-500'}`}/> {credits} Credits
-                <span className="bg-yellow-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded ml-1 group-hover:inline-block hidden">+ Add</span>
+             <button onClick={handlePayment} className="px-3 py-1.5 bg-slate-800 border border-slate-700 hover:border-violet-500/50 rounded-full text-sm font-bold flex gap-2 items-center text-slate-300 transition group">
+                <Zap className={`w-4 h-4 ${credits > 0 ? 'text-yellow-400 fill-yellow-400' : 'text-slate-500'}`}/> {credits}
+                <span className="bg-violet-600 text-white text-[10px] px-1.5 py-0.5 rounded ml-1 group-hover:inline-block hidden transition-all">+ ADD</span>
              </button>
-             <button onClick={onLogout} className="text-slate-400 hover:text-white flex items-center gap-1 text-sm font-bold">
-                <LogOut className="w-4 h-4"/> Logout
+             <button onClick={onLogout} className="text-slate-400 hover:text-white p-2 hover:bg-white/5 rounded-lg transition">
+               <LogOut className="w-5 h-5"/>
              </button>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Mode Switcher */}
-        <div className="flex justify-center mb-8">
-            <div className="bg-slate-800 p-1 rounded-xl flex gap-1">
-                <button onClick={() => setMode('single')} className={`px-6 py-2 rounded-lg text-sm font-bold transition ${mode === 'single' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>Single Analysis</button>
-                <button onClick={() => setMode('bulk')} className={`px-6 py-2 rounded-lg text-sm font-bold transition ${mode === 'bulk' ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>Bulk (Excel)</button>
+      <div className="max-w-7xl mx-auto px-6 py-10 relative z-10">
+        <div className="flex justify-center mb-10">
+            <div className="bg-slate-900/80 p-1.5 rounded-xl flex gap-1 border border-white/10 shadow-lg backdrop-blur-sm">
+                <button onClick={() => setMode('single')} className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${mode === 'single' ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/25' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+                  <Sparkles className="w-4 h-4"/> Single Analysis
+                </button>
+                <button onClick={() => setMode('bulk')} className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${mode === 'bulk' ? 'bg-fuchsia-600 text-white shadow-lg shadow-fuchsia-500/25' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+                  <FileSpreadsheet className="w-4 h-4"/> Bulk (Excel)
+                </button>
             </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Settings Panel */}
+            {/* Left Panel: Settings */}
             <div className="lg:col-span-4 space-y-5">
-                <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-xl">
-                    <h3 className="font-bold text-white mb-5 flex gap-2 items-center"><Globe className="w-5 h-5 text-blue-500"/> Campaign Settings</h3>
+                <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                    <h3 className="font-bold text-white mb-6 flex gap-2 items-center border-b border-white/5 pb-4">
+                      <Globe className="w-5 h-5 text-violet-500"/> Global Configuration
+                    </h3>
                     
-                    <div className="space-y-4">
-                        <div>
-                            <label className="text-xs text-slate-500 font-bold uppercase mb-1 block">Language</label>
-                            <select className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white outline-none focus:border-blue-500 transition" value={language} onChange={e=>setLanguage(e.target.value)}>
-                                <option value="English">🇺🇸 English</option>
-                                <option value="Korean">🇰🇷 Korean</option>
-                                <option value="Japanese">🇯🇵 Japanese</option>
-                                <option value="Spanish">🇪🇸 Spanish</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="text-xs text-slate-500 font-bold uppercase mb-1 block">Tone & Manner</label>
+                    <div className="space-y-5">
+                        <div className="group">
+                            <label className="text-xs text-slate-400 font-bold uppercase mb-2 block group-hover:text-violet-400 transition">Output Language</label>
                             <div className="relative">
-                                <MessageSquare className="absolute left-3 top-3.5 w-4 h-4 text-slate-500"/>
-                                <select className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 pl-10 text-white outline-none appearance-none focus:border-blue-500 transition" value={tone} onChange={e=>setTone(e.target.value)}>
+                              <select className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition appearance-none" value={language} onChange={e=>setLanguage(e.target.value)}>
+                                  <option value="English">🇺🇸 English</option>
+                                  <option value="Korean">🇰🇷 Korean</option>
+                                  <option value="Japanese">🇯🇵 Japanese</option>
+                                  <option value="Spanish">🇪🇸 Spanish</option>
+                              </select>
+                              <Globe2 className="absolute right-4 top-3.5 w-4 h-4 text-slate-500 pointer-events-none"/>
+                            </div>
+                        </div>
+                        
+                        <div className="group">
+                            <label className="text-xs text-slate-400 font-bold uppercase mb-2 block group-hover:text-violet-400 transition">Tone & Manner</label>
+                            <div className="relative">
+                                <MessageSquare className="absolute left-4 top-3.5 w-4 h-4 text-slate-500"/>
+                                <select className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 pl-12 text-white outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition appearance-none" value={tone} onChange={e=>setTone(e.target.value)}>
                                     <option value="Professional">👔 Professional</option>
                                     <option value="Friendly">😊 Friendly</option>
                                     <option value="Direct">⚡ Direct</option>
                                 </select>
                             </div>
                         </div>
-                        <div className={`flex items-center gap-3 bg-slate-800 p-3 rounded-lg border cursor-pointer transition ${hiring ? 'border-green-500/50 bg-green-900/10' : 'border-slate-700'}`} onClick={()=>setHiring(!hiring)}>
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center ${hiring ? 'bg-green-500 border-green-500' : 'border-slate-500'}`}>
+
+                        <div className={`flex items-center gap-3 bg-slate-950 p-3.5 rounded-xl border cursor-pointer transition-all ${hiring ? 'border-green-500/50 bg-green-500/10' : 'border-slate-800 hover:border-slate-700'}`} onClick={()=>setHiring(!hiring)}>
+                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${hiring ? 'bg-green-500 border-green-500' : 'border-slate-600'}`}>
                                 {hiring && <CheckCircle className="w-3.5 h-3.5 text-white"/>}
                             </div>
                             <span className={`text-sm font-medium ${hiring ? 'text-green-400' : 'text-slate-300'}`}>Include Hiring Signals</span>
                         </div>
-                        <hr className="border-slate-800 my-4"/>
-                        <div>
-                            <label className="text-xs text-slate-500 font-bold uppercase mb-1 block">My Service</label>
-                            <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none" value={myService} onChange={e=>setMyService(e.target.value)}/>
-                        </div>
-                        <div>
-                             <label className="text-xs text-slate-500 font-bold uppercase mb-1 block">Description</label>
-                             <textarea className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white resize-none focus:border-blue-500 outline-none" rows="3" value={desc} onChange={e=>setDesc(e.target.value)}/>
+
+                        <div className="space-y-3 pt-2">
+                            <label className="text-xs text-slate-400 font-bold uppercase">My Service</label>
+                            <input type="text" className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition" value={myService} onChange={e=>setMyService(e.target.value)}/>
+                            <textarea className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white resize-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition" rows="3" value={desc} onChange={e=>setDesc(e.target.value)}/>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Results Panel */}
+            {/* Right Panel: Workspace */}
             <div className="lg:col-span-8">
                 {mode === 'single' ? (
-                    <div className="h-full flex flex-col gap-6">
-                        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-xl">
-                            <label className="text-xs text-slate-500 font-bold uppercase mb-2 block">Target Company Name</label>
+                    <div className="flex flex-col gap-6 h-full">
+                        {/* Input Area */}
+                        <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 shadow-xl backdrop-blur-sm transition-all focus-within:border-violet-500/50 focus-within:ring-1 focus-within:ring-violet-500/20">
+                            <label className="text-xs text-slate-400 font-bold uppercase mb-3 block">Target Company Name</label>
                             <div className="flex gap-3">
-                                <div className="relative flex-1">
-                                    <Building2 className="absolute left-3 top-3.5 w-5 h-5 text-slate-500"/>
-                                    <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 pl-10 text-white text-lg focus:ring-2 focus:ring-blue-500 outline-none placeholder-slate-600" 
+                                <div className="relative flex-1 group">
+                                    <Building2 className="absolute left-4 top-3.5 w-5 h-5 text-slate-500 group-focus-within:text-violet-400 transition"/>
+                                    <input type="text" className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 pl-12 text-white text-lg focus:border-violet-500 outline-none placeholder-slate-600 transition" 
                                         placeholder="Ex: Toss, Naver, Netflix" value={company} onChange={e=>setCompany(e.target.value)}/>
                                 </div>
                                 <button onClick={handleGenerate} disabled={loading} 
-                                    className={`px-8 rounded-xl font-bold text-lg shadow-lg flex items-center gap-2 transition ${loading ? 'bg-slate-700 text-slate-500' : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white'}`}>
+                                    className={`px-8 rounded-xl font-bold text-lg shadow-lg flex items-center gap-2 transition-all transform hover:-translate-y-1 active:translate-y-0 disabled:translate-y-0 ${loading ? 'bg-slate-800 text-slate-500' : 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-violet-500/25'}`}>
                                     {loading ? <Loader2 className="animate-spin"/> : <Sparkles className="w-5 h-5"/>} Generate
                                 </button>
                             </div>
                         </div>
                         
+                        {/* Results Area */}
                         {result ? (
-                            <div className="space-y-4">
-                                {/* News Card */}
-                                <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden animate-fade-in-up">
-                                    <div className="bg-slate-50 px-5 py-3 border-b border-slate-100 flex items-center gap-2">
+                            <div className="space-y-4 animate-fade-in-up">
+                                {/* News Widget */}
+                                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                                    <div className="bg-slate-50 px-5 py-3 border-b border-slate-200 flex items-center gap-2">
                                         <Building2 className="w-4 h-4 text-blue-600" />
-                                        <span className="text-xs font-bold text-slate-600 uppercase">Latest News</span>
+                                        <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Latest News</span>
                                     </div>
-                                    <div className="p-5">
+                                    <div className="p-5 bg-white">
                                         {result.news && result.news.length > 0 ? (
-                                            <ul className="space-y-2">
+                                            <ul className="space-y-3">
                                                 {result.news.map((item, i) => (
-                                                    <li key={i} className="text-sm text-slate-700 flex gap-2 items-start leading-relaxed">
-                                                        <span className="text-blue-400 mt-1.5 w-1.5 h-1.5 bg-blue-400 rounded-full flex-shrink-0"></span>
+                                                    <li key={i} className="text-sm text-slate-700 flex gap-3 items-start leading-relaxed">
+                                                        <span className="text-blue-500 mt-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0"></span>
                                                         {item}
                                                     </li>
                                                 ))}
                                             </ul>
-                                        ) : <p className="text-sm text-slate-400">No recent news found.</p>}
+                                        ) : <p className="text-sm text-slate-400 italic">No recent news found.</p>}
                                     </div>
                                 </div>
 
-                                {/* Hiring Card */}
+                                {/* Hiring Widget */}
                                 {(result.hiring && result.hiring.length > 0) && (
-                                    <div className="bg-white rounded-2xl shadow-lg border border-green-200 overflow-hidden animate-fade-in-up delay-100">
-                                        <div className="bg-green-50 px-5 py-3 border-b border-green-100 flex items-center gap-2">
+                                    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-l-4 border-green-500">
+                                        <div className="bg-green-50/50 px-5 py-3 border-b border-green-100 flex items-center gap-2">
                                             <Briefcase className="w-4 h-4 text-green-600" />
-                                            <span className="text-xs font-bold text-green-700 uppercase">Hiring & Growth Signals</span>
+                                            <span className="text-xs font-bold text-green-700 uppercase tracking-wider">Hiring Signals Detected</span>
                                         </div>
-                                        <div className="p-5">
-                                            <ul className="space-y-2">
+                                        <div className="p-5 bg-white">
+                                            <ul className="space-y-3">
                                                 {result.hiring.map((item, i) => (
-                                                    <li key={i} className="text-sm text-slate-700 flex gap-2 items-start leading-relaxed">
-                                                        <span className="text-green-500 font-bold text-xs mt-0.5 px-1.5 py-0.5 bg-green-100 rounded">HIRING</span>
+                                                    <li key={i} className="text-sm text-slate-700 flex gap-3 items-start leading-relaxed">
+                                                        <span className="text-green-600 font-bold text-[10px] mt-0.5 px-2 py-0.5 bg-green-100 rounded-full uppercase tracking-wide">HIRING</span>
                                                         {item}
                                                     </li>
                                                 ))}
@@ -494,51 +433,62 @@ function MainApp({ session, onLogout }) {
                                     </div>
                                 )}
 
-                                {/* Email Card */}
-                                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden animate-fade-in-up delay-200">
-                                    <div className="bg-slate-50 px-5 py-3 border-b border-slate-100 flex items-center justify-between">
+                                {/* Email Draft Widget */}
+                                <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                                    <div className="bg-gradient-to-r from-slate-50 to-white px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <Send className="w-4 h-4 text-purple-600" />
-                                            <span className="text-xs font-bold text-slate-600 uppercase">Generated Email Draft</span>
+                                            <div className="p-1.5 bg-violet-100 rounded-lg text-violet-600"><Send className="w-4 h-4"/></div>
+                                            <span className="text-sm font-bold text-slate-700">Generated Email Draft</span>
                                         </div>
                                         <button onClick={() => {navigator.clipboard.writeText(result.email); alert("Copied to clipboard!")}}
-                                            className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded transition">
-                                            <LayoutTemplate className="w-3 h-3"/> Copy
+                                            className="text-xs font-bold text-violet-600 hover:text-white hover:bg-violet-600 border border-violet-200 hover:border-violet-600 px-3 py-1.5 rounded-lg transition flex items-center gap-2">
+                                            <LayoutTemplate className="w-3 h-3"/> Copy Text
                                         </button>
                                     </div>
-                                    <div className="p-6 bg-white">
-                                        <pre className="whitespace-pre-wrap font-sans text-slate-800 leading-relaxed text-base bg-transparent p-0 border-none">
+                                    <div className="p-8 bg-white">
+                                        <pre className="whitespace-pre-wrap font-sans text-slate-800 leading-relaxed text-[15px] bg-transparent p-0 border-none">
                                             {result.email}
                                         </pre>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <div className="h-full bg-slate-900/50 border border-slate-700/50 rounded-2xl flex flex-col items-center justify-center text-slate-500 border-dashed border-2 border-slate-800 min-h-[400px]">
-                                <Sparkles className="w-10 h-10 text-slate-700 mb-4 opacity-50"/>
-                                <p className="text-sm">Enter a company name to start analysis</p>
+                            <div className="h-full min-h-[400px] bg-slate-900/40 border border-white/5 rounded-2xl flex flex-col items-center justify-center text-slate-500 border-dashed border-2 border-slate-800/50">
+                                <div className="w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center mb-4 animate-pulse">
+                                  <Sparkles className="w-8 h-8 text-slate-600"/>
+                                </div>
+                                <p className="text-sm font-medium text-slate-400">Ready to analyze. Enter a company to start.</p>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <div className="h-full bg-slate-900 border border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-xl">
-                        <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-6">
-                            <FileSpreadsheet className="w-10 h-10 text-purple-400"/>
+                    // Bulk Mode UI
+                    <div className="h-full bg-slate-900/60 border border-white/10 rounded-2xl p-12 flex flex-col items-center justify-center text-center shadow-xl backdrop-blur-sm">
+                        <div className="w-24 h-24 bg-fuchsia-500/10 rounded-3xl flex items-center justify-center mb-8 shadow-lg shadow-fuchsia-500/10">
+                            <FileSpreadsheet className="w-10 h-10 text-fuchsia-400"/>
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2">Bulk Generation</h3>
-                        <p className="text-slate-400 mb-8 max-w-sm">Upload a CSV/Excel file with a 'Company' column. We will analyze all of them at once.</p>
+                        <h3 className="text-3xl font-bold text-white mb-3">Bulk Generation</h3>
+                        <p className="text-slate-400 mb-10 max-w-md leading-relaxed">
+                          Upload a CSV/Excel file with a <code className="bg-slate-800 px-1.5 py-0.5 rounded text-fuchsia-300 text-xs">Company</code> column.<br/> 
+                          We will analyze up to 100 companies at once.
+                        </p>
                         
-                        <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 border border-dashed border-slate-600 hover:border-slate-500 rounded-xl w-full max-w-md p-10 transition group mb-6">
-                            <input type="file" className="hidden" accept=".csv, .xlsx" onChange={(e)=>setFile(e.target.files[0])}/>
-                            <Upload className="w-8 h-8 text-slate-500 group-hover:text-white mx-auto mb-3"/>
-                            <span className="text-slate-400 group-hover:text-white font-medium block">
-                                {file ? file.name : "Click to Upload File"}
-                            </span>
+                        <label className="cursor-pointer group relative w-full max-w-md">
+                            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                            <div className="relative bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-fuchsia-500/50 border-dashed rounded-2xl p-10 transition-all duration-300 flex flex-col items-center gap-4">
+                              <input type="file" className="hidden" accept=".csv, .xlsx" onChange={(e)=>setFile(e.target.files[0])}/>
+                              <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Upload className="w-6 h-6 text-slate-400 group-hover:text-white"/>
+                              </div>
+                              <span className="text-slate-400 group-hover:text-white font-medium transition-colors">
+                                  {file ? <span className="text-fuchsia-400 flex items-center gap-2"><CheckCircle className="w-4 h-4"/> {file.name}</span> : "Click to Upload File"}
+                              </span>
+                            </div>
                         </label>
                         
                         <button onClick={handleBulkGenerate} disabled={loading || !file} 
-                            className={`w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-lg ${loading || !file ? 'bg-slate-700 text-slate-500' : 'bg-purple-600 text-white hover:bg-purple-500'}`}>
-                            {loading ? 'Processing...' : '🚀 Start Bulk Processing'}
+                            className={`mt-8 w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center gap-2 transition-all transform hover:-translate-y-1 ${loading || !file ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500 text-white shadow-fuchsia-500/25'}`}>
+                            {loading ? <><Loader2 className="animate-spin"/> Processing...</> : <><RocketIcon className="w-5 h-5"/> Start Bulk Processing</>}
                         </button>
                     </div>
                 )}
@@ -548,5 +498,10 @@ function MainApp({ session, onLogout }) {
     </div>
   )
 }
+
+// Helper Icon
+const RocketIcon = ({className}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.1 4-1 4-1"/><path d="M12 15v5s3.03-.55 4-2c1.1-1.62 1-4 1-4"/></svg>
+)
 
 export default App
